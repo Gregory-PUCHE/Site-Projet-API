@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="site_style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+ integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+ crossorigin=""></script>
+ <!-- Marker Cluster -->
+ <link rel="stylesheet" href="//unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+ <link rel="stylesheet" href="//unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+ <script src="//unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+ <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+ <link rel='stylesheet' href='https://s3-us-west-2.amazonaws.com/s.cdpn.io/102308/propertiesJS.css'>
+ <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.1/toastr.min.css'>
+</head>
+<body>
+    <header class="header sticky sticky--top js-header">
+        <div class="grid">
+          <nav class="navigation">
+            <ul class="navigation__list navigation__list--inline">
+              <li class="navigation__item">
+                <a href="index.html" class="navigation__link navigation__link--is-active">Home</a>
+              </li>
+              <li class="navigation__item">
+                <a href="Air.html" class="navigation__link">Air pollution</a>
+              </li>
+              <li class="navigation__item">
+                <a href="Plastic.html" class="navigation__link">Plastic pollution</a>
+              </li>
+              <li class="navigation__item">
+                <a href="Data.html" class="navigation__link">Data gathering</a>
+              </li>
+              <li class="navigation__item">
+                <a href="About.html" class="navigation__link">About us</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <div id=map></div>
+      <div id="chartContainer" class="chart" style="height: 300px; width: 100%;"></div>
+<!--<label for="language">Choose a language :</label>
+<select id="language" name="language">
+    <option value="english">English</option>
+    <option value="french">Français</option>
+</select>-->
+<br>
+
+    <br>
+    <fieldset>
+        <legend>Informations</legend>
+        <br>
+        <div class="formulaire">
+            <input type="radio" id="AP" name="info" value="air pollution" onclick="Thanos()">
+            <label for="AP">Air pollution</label>
+        </div>
+        <div class="formulaire">
+            <input type="radio" id="PP" name="info" value="plastic pollution" onclick="Thanos2()">
+            <label for="PP">Plastic pollution</label>
+        </div>
+        <div class="formulaire">
+            <input type="radio" id="B" name="info" value="both" onclick="Reset()">
+            <label for="B">Both</label>
+        </div>
+        <br>
+        <!--<label for="data">Choose a data visualization type :</label>
+    <select id="dataview" name="dataview">
+        <option value="mapview" onclick="">Map</option>
+        <option value="histogram">Histogram</option>
+    </select>-->
+    <fieldset id="AirQ">
+        <legend>Data ordered by level of air pollution (AQI)</legend>
+        <br>
+        <div class="formulaire">
+            <input type="checkbox" id="good" name="quality" value="good" checked="checked" onclick="checker_1()">
+            <label for="good">Good (0-50)</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="moderate" name="quality" value="Moderate" checked="checked" onclick="checker_2()">
+            <label for="moderate">Moderate (51-100)</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="sensitive" name="quality" value="sensitive" checked="checked" onclick="checker_3()">
+            <label for="sensitive">Unhealthy for sensitive groups (101-150)</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="unhealthy" name="quality" value="unhealthy" checked="checked" onclick="checker_4()">
+            <label for="unhealthy">Unhealthy (151-200)</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="very_unhealthy" name="quality" value="very_unhealthy" checked="checked" onclick="checker_5()">
+            <label for="very_unhealthy">Very unhealthy (201-300)</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="hazardous" name="quality" value="hazardous" checked="checked" onclick="checker_6()">
+            <label for="hazardous">Hazardous (300+)</label>
+        </div>
+    </fieldset>
+    <div class="illustration2"><img src="images/tableau.png"></div>
+    <fieldset id="ocean">
+        <legend>Data ordered by different types of beaches affected</legend>
+        <br>
+        <div class="formulaire">
+            <input type="checkbox" id="good2" name="quality" value="good2" checked="checked" onclick="checker2_1()">
+            <label for="good2">Sandy beaches</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="moderate2" name="quality" value="Moderate2" checked="checked" onclick="checker2_2()">
+            <label for="moderate2">Pebble beaches</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="sensitive2" name="quality" value="sensitive2" checked="checked" onclick="checker2_3()">
+            <label for="sensitive2">Mixed beaches</label>
+        </div>
+        <div class="formulaire">
+            <input type="checkbox" id="unhealthy2" name="quality" value="unhealthy2" checked="checked" onclick="checker2_4()">
+            <label for="unhealthy2">Other kinds of beaches</label>
+        </div>
+        </div>
+    </fieldset>
+    <div class="illustration"><img src="images/mer.jpg"></div>
+    </fieldset>
+    <footer>
+        <p>Website made by Enzo Garcia and Grégory Puche</p>
+        <p>Websites used for data gathering : <a href="https://waqi.info/">https://waqi.info/</a></p>
+    </footer>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script src=site.js></script>
+</body>
+</html>
